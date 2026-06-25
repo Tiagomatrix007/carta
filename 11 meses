@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11 Meses</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe4ec 0%, #ffd6e7 50%, #ffe9f0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Partículas */
+  .particula {
+    position: fixed;
+    animation: flutuar linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    font-size: 0.85rem;
+    color: #f48fb1;
+  }
+  @keyframes flutuar {
+    0%   { transform: translateY(110vh); opacity: 0; }
+    10%  { opacity: 0.5; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+  }
+
+  #tela-inicial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    z-index: 10;
+  }
+
+  #mes-display {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.8rem;
+    font-weight: 400;
+    color: #c2185b;
+    letter-spacing: 2px;
+    min-height: 4rem;
+    text-align: center;
+    position: relative;
+  }
+
+  #mes-display span {
+    display: inline-block;
+    animation: nenhuma 0s;
+  }
+
+  @keyframes entrar {
+    0%   { opacity: 0; transform: translateY(20px) scale(0.9); }
+    60%  { transform: translateY(-4px) scale(1.04); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes sair {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-18px) scale(0.9); }
+  }
+
+  #mes-display span.animar-entrar {
+    animation: entrar 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+  }
+  #mes-display span.animar-sair {
+    animation: sair 0.3s ease forwards;
+  }
+
+  /* ENVELOPE SVG-style com CSS */
+  #envelope {
+    cursor: pointer;
+    width: 200px;
+    height: 150px;
+    position: relative;
+    transition: transform 0.15s;
+    filter: drop-shadow(0 6px 18px rgba(233,30,140,0.15));
+  }
+  #envelope:active { transform: scale(0.96); }
+
+  #envelope svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Animação da tampa */
+  #flap {
+    transform-origin: 50% 0%;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-box: fill-box;
+  }
+  #envelope.abrindo #flap {
+    transform: rotateX(180deg);
+  }
+
+  /* Coração pulsando */
+  #coracao {
+    animation: pulsar 1.4s ease-in-out infinite;
+    transform-origin: 100px 82px;
+  }
+  @keyframes pulsar {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.18); }
+  }
+
+  /* CARTA */
+  #carta {
+    display: none;
+    max-width: 500px;
+    width: 92%;
+    max-height: 88vh;
+    overflow-y: auto;
+    animation: surgir 0.7s ease forwards;
+    z-index: 10;
+    scrollbar-width: thin;
+    scrollbar-color: #f48fb1 transparent;
+  }
+  #carta::-webkit-scrollbar { width: 3px; }
+  #carta::-webkit-scrollbar-thumb { background: #f48fb1; border-radius: 3px; }
+
+  @keyframes surgir {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .papel {
+    background: #fffafc;
+    border-radius: 12px;
+    padding: 46px 40px 40px;
+    box-shadow: 0 8px 40px rgba(233,30,140,0.13), 0 2px 10px rgba(0,0,0,0.06);
+    border: 1.5px solid #f8d7e3;
+  }
+
+  .papel::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: #e91e8c;
+    margin: 0 auto 26px;
+    border-radius: 2px;
+    opacity: 0.5;
+  }
+
+  .papel h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    color: #880e4f;
+    text-align: center;
+    margin-bottom: 26px;
+  }
+
+  .papel p {
+    color: #4a1428;
+    font-size: 0.96rem;
+    line-height: 2;
+    margin-bottom: 14px;
+    text-align: justify;
+  }
+
+  .divisor {
+    width: 100%;
+    height: 1px;
+    background: #f8d7e3;
+    margin: 20px 0;
+  }
+
+  .citacao {
+    border-left: 2px solid #e91e8c;
+    padding: 10px 16px;
+    margin: 20px 0 !important;
+    color: #880e4f !important;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .fechamento {
+    margin-top: 28px;
+    text-align: right;
+  }
+  .fechamento p { text-align: right; color: #4a1428; font-size: 0.95rem; }
+  .assinatura {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: #c2185b;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<script>
+  const chars = ['·', '·', '·'];
+  for (let i = 0; i < 16; i++) {
+    const el = document.createElement('div');
+    el.className = 'particula';
+    el.textContent = '✦';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (6 + Math.random() * 7) + 's';
+    el.style.animationDelay = (Math.random() * 8) + 's';
+    el.style.fontSize = (0.4 + Math.random() * 0.5) + 'rem';
+    document.body.appendChild(el);
+  }
+</script>
+
+<div id="tela-inicial">
+  <div id="mes-display"></div>
+
+  <div id="envelope" onclick="clicar()">
+    <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+      <!-- Corpo do envelope -->
+      <rect x="6" y="30" width="188" height="114" rx="10" ry="10"
+            fill="#fff5f7" stroke="#222" stroke-width="3.5"/>
+
+      <!-- Dobras laterais (linhas diagonais) -->
+      <line x1="6" y1="144" x2="100" y2="82" stroke="#ddd0d3" stroke-width="2"/>
+      <line x1="194" y1="144" x2="100" y2="82" stroke="#ddd0d3" stroke-width="2"/>
+
+      <!-- Tampa (triângulo superior) -->
+      <polygon id="flap" points="6,30 194,30 100,98"
+               fill="#ffe0ec" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+
+      <!-- Coração no lacre -->
+      <g id="coracao">
+        <path d="M100,90 C100,90 88,78 88,72 C88,66 94,62 100,68 C106,62 112,66 112,72 C112,78 100,90 100,90 Z"
+              fill="#c2185b" stroke="#222" stroke-width="2.5" stroke-linejoin="round"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<div id="carta">
+  <div class="papel">
+    <h1>Feliz 11 meses</h1>
+
+    <p>Minha linda, aqui estou passando mais um mês com a pessoa mais incrível desse mundo. Obrigado por ser a mulher da minha vida. Saiba que você é uma pessoa muito especial pra mim.</p>
+
+    <p>Obrigado por sempre me apoiar e me dar direção e motivação mesmo não estando presente. Pensar em você e em quão lindo pode ser o nosso futuro é a melhor motivação que posso ter.</p>
+
+    <p>Pra mim, você é a pessoa que mais confio e que sei que posso contar quando precisar.</p>
+
+    <p>E não posso deixar de falar do tamanho da sua beleza. Simplesmente namoro a mulher mais gata desse mundo, sempre bonita com seu sorriso de se admirar, minha flor de Flamboyant.</p>
+
+    <div class="divisor"></div>
+
+    <p>Eu sempre desejo o melhor pra você e sua felicidade. Sempre vou querer te ver feliz. Não tem coisa melhor do que te ver assim, alegre.</p>
+
+    <p>Nosso futuro é tudo que quero com você: o nosso casamento, nossas conquistas, a casa, os carros, os filhos, e nossas conquistas profissionais também. Se continuarmos crescendo juntos, vamos alcançar tudo isso, e sei que vamos conseguir.</p>
+
+    <p class="citacao">Como Paulo cita na carta aos Coríntios: "O amor é paciente" — e sei que vamos suportar tudo e alcançar nossos objetivos.</p>
+
+    <p>Conte comigo no que você precisar. Estarei ao seu lado sempre, até que a morte nos separe.</p>
+
+    <div class="fechamento">
+      <p>Com todo meu amor,</p>
+      <div class="assinatura">Tiago</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const meses = [
+    '1 mês', '2 meses', '3 meses', '4 meses', '5 meses',
+    '6 meses', '7 meses', '8 meses', '9 meses', '10 meses', '11 meses'
+  ];
+
+  let cliques = 0;
+  const display = document.getElementById('mes-display');
+
+  function clicar() {
+    if (cliques >= 11) return;
+    cliques++;
+    if (navigator.vibrate) navigator.vibrate(40);
+
+    const span = display.querySelector('span');
+
+    const trocar = () => {
+      display.innerHTML = `<span class="animar-entrar">${meses[cliques - 1]}</span>`;
+    };
+
+    if (span) {
+      span.classList.add('animar-sair');
+      setTimeout(trocar, 280);
+    } else {
+      trocar();
+    }
+
+    if (cliques === 11) {
+      document.getElementById('envelope').classList.add('abrindo');
+      setTimeout(() => {
+        document.getElementById('tela-inicial').style.display = 'none';
+        document.getElementById('carta').style.display = 'block';
+      }, 950);
+    }
+  }
+</script>
+</body>
+</html>
